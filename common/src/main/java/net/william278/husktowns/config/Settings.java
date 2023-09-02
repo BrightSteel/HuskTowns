@@ -28,10 +28,7 @@ import net.william278.husktowns.database.Database;
 import net.william278.husktowns.network.Broker;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @YamlFile(header = """
         ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
@@ -176,6 +173,10 @@ public class Settings {
     private List<String> unclaimableWorlds = List.of(
             "world_nether",
             "world_the_end"
+    );
+
+    private Set<String> unclaimableIsles = Set.of(
+            "floral", "tundra", "lush", "arid", "mushroom"
     );
 
     @YamlComment("A list of town names that cannot be used.")
@@ -426,7 +427,7 @@ public class Settings {
     }
 
     public boolean isUnclaimableWorld(@NotNull World world) {
-        return unclaimableWorlds.stream().anyMatch(world.getName()::equalsIgnoreCase);
+        return unclaimableWorlds.stream().anyMatch(world.getName()::equalsIgnoreCase) || unclaimableIsles.stream().anyMatch(s -> world.getName().contains(s));
     }
 
     public boolean isTownNameAllowed(@NotNull String name) {
